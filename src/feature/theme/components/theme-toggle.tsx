@@ -38,7 +38,7 @@ const ThemeToggleButton: React.FC<ThemeToggleTypes> = (props) => {
       onClick={toggleTheme}
       type="button"
       className={clsx(
-        "px-2 py-2 border-[1px] border-support-100/30 transition-all text-support-100 rounded-lg flex items-center ",
+        "px-2 py-2 border-[1px] border-support-100/30 text-support-100 rounded-lg flex items-center ",
         props.className
       )}
     >
