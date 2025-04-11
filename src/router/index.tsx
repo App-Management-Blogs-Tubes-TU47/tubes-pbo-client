@@ -3,19 +3,19 @@ import {
   useRoutes,
   // Navigate
 } from "react-router-dom";
-// import { route_auth } from "./auth";
-// import { route_unauth } from "./unauth";
+import { route_auth } from "./auth";
+import { route_unauth } from "./unauth";
 import { route_global } from "./global";
-// import { useAuthStore } from "@/hooks/useAuthStore";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
 const Routes: React.FC = () => {
-  // const token = useAuthStore((state) => state.users.token);
+  const token = useAuthStore((state) => state.users.token);
 
-  // const routes = token ? route_auth : route_unauth;
+  const routes = token ? route_auth : route_unauth;
 
   return useRoutes([
     ...route_global,
-    // ...routes,
+    ...routes,
     // {
     //   path: "*",
     //   element: <Navigate to={token ? "/" : "/login"} replace />,

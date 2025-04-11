@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useThemeStore } from "../hooks/useTheme";
 import { mdiThemeLightDark } from "@mdi/js";
 import Icon from "@mdi/react";
@@ -34,7 +35,8 @@ const ThemeToggleButton: React.FC<ThemeToggleTypes> = (props) => {
   const { theme, toggleTheme } = useThemeStore();
 
   return (
-    <button
+    <Button
+      variant={"outline"}
       onClick={toggleTheme}
       type="button"
       className={clsx(
@@ -46,7 +48,7 @@ const ThemeToggleButton: React.FC<ThemeToggleTypes> = (props) => {
       <span className={clsx(props.showLabel ? "ml-2" : "hidden")}>
         {theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
       </span>
-    </button>
+    </Button>
   );
 };
 
