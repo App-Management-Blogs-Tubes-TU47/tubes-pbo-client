@@ -8,6 +8,7 @@ export interface SignInResponseType {
   id: string;
   name: string;
   email: string;
+  role: string;
   token: string;
 }
 
@@ -32,6 +33,7 @@ export const useSignIn = () => {
             id: "testid",
             name: "admin",
             email: "email@gmail.com",
+            role: "admin",
             token: "fake-token",
           });
         } else {
@@ -53,6 +55,7 @@ export const useSignIn = () => {
           id: res.id,
           name: res.name,
           email: res.email,
+          role: res.role,
           token: res.token,
         });
         nav("/dashboard");

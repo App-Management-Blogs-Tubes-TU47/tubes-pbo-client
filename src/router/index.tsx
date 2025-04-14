@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Navigate,
   useRoutes,
   // Navigate
 } from "react-router-dom";
@@ -16,10 +17,10 @@ const Routes: React.FC = () => {
   return useRoutes([
     ...route_global,
     ...routes,
-    // {
-    //   path: "*",
-    //   element: <Navigate to={token ? "/" : "/login"} replace />,
-    // },
+    {
+      path: "*",
+      element: <Navigate to={token ? "/dashboard" : "/signin"} replace />,
+    },
   ]);
 };
 

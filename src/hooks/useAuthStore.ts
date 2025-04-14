@@ -5,6 +5,7 @@ interface UserTypes {
   id: string;
   name: string;
   email: string;
+  role: string | "admin" | "writer";
 
   /**
    * @Types {string | null}
@@ -48,10 +49,10 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      users: { id: "", name: "", email: "", token: "" },
+      users: { id: "", name: "", email: "", role: "", token: "" },
       setUsers: (users) => set({ users }),
       clearUsers: () =>
-        set({ users: { id: "", name: "", email: "", token: "" } }),
+        set({ users: { id: "", name: "", email: "", role: "", token: "" } }),
 
       setToken: (token) =>
         set((state) => ({ users: { ...state.users, token } })),

@@ -4,6 +4,7 @@ import React, { Suspense } from "react";
 import { RouteObject } from "react-router-dom";
 
 const LandingPage = React.lazy(() => import("../feature/landing/pages"));
+const BlogDetailsPage = React.lazy(() => import("../feature/landing/pages/details"));
 
 export const route_global: RouteObject[] = [
   {
@@ -18,6 +19,14 @@ export const route_global: RouteObject[] = [
           </Suspense>
         ),
       },
+      {
+        path: "/blog/:slug",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <BlogDetailsPage />
+          </Suspense>
+        ),
+      }
     ],
   },
 ];

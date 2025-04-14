@@ -19,7 +19,7 @@ const LandingLayouts: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="sticky top-0">
+      <div className="sticky top-0 z-50 bg-background">
         <div className="flex justify-between items-center border-b p-4 shadow-md px-4">
           <div className="text-2xl font-bold">NulisAja</div>
           <div className="space-x-4 flex items-center">
@@ -34,7 +34,9 @@ const LandingLayouts: React.FC = () => {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem onClick={()=> navigate('/dashboard')}>Dashboard</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                        Dashboard
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => clearUsers()}>
                         Logout
                       </DropdownMenuItem>
@@ -52,8 +54,10 @@ const LandingLayouts: React.FC = () => {
           </div>
         </div>
       </div>
-      <div>
-        <Outlet />
+      <div className="w-screen flex items-center self-center justify-center">
+        <div className="md:w-[80vw] w-screen p-3">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
