@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import ReactQuill from 'react-quill';
 
 const BlogDetailsPages: React.FC = () => {
   const params = useParams();
@@ -82,6 +83,7 @@ const BlogDetailsPages: React.FC = () => {
                 alt={blogDetails.title}
                 className="w-1/2"
               />
+              {/* <ReactQuill theme="" value={blogDetails.article} />; */}
               <div dangerouslySetInnerHTML={{ __html: blogDetails.article }} />
             </div>
             <div>
