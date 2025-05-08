@@ -12,6 +12,11 @@ export interface LandingPageProps {
   isChildrenFromAuthorUsername?: string;
 }
 
+function stripHtmlTags(input: string) {
+  return input.replace(/<[^>]*>/g, '');
+}
+
+
 const LandingPages: React.FC<LandingPageProps> = (props) => {
   const { blogs, blogCategoryList } = useBlogList(props);
   const navigate = useNavigate();
@@ -48,7 +53,7 @@ const LandingPages: React.FC<LandingPageProps> = (props) => {
                   <div className="flex flex-row gap-4">
                     <div>
                       <h1 className="font-semibold text-2xl">{blog?.title}</h1>
-                      <p className="line-clamp-2 opacity-60">{blog?.article}</p>
+                      <p className="line-clamp-2 opacity-60">{stripHtmlTags(blog?.article)}</p>
                     </div>
                     <img src={blog?.tumbnailUrl} className="h-24" alt="" />
                   </div>
