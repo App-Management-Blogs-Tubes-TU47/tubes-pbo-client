@@ -1,8 +1,5 @@
 import React from "react";
-import { useSignUp, ValidationSchema } from "../hooks/useSignUp";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useSignUp } from "../hooks/useSignUp";
 import {
   Form,
   FormControl,
@@ -17,27 +14,7 @@ import { LoginAssets } from "@/assets";
 import { Link } from "react-router-dom";
 
 const SignUpPages: React.FC = () => {
-  const { SignUp } = useSignUp();
-  const form = useForm<z.infer<typeof ValidationSchema>>({
-    resolver: zodResolver(ValidationSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      username: "",
-      password: "",
-
-    },
-  });
-
-  // TODO: need move to hooks
-  const onSubmit = async (data: z.infer<typeof ValidationSchema>) => {
-    try {
-      await SignUp(data.username, data.password);
-      // Handle successful login
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
-  };
+  const { form, handleSignUp } = useSignUp();
 
   return (
     <div className="w-screen h-screen overflow-hidden flex items-center justify-center">
@@ -50,7 +27,7 @@ const SignUpPages: React.FC = () => {
       <div className="w-[50vw] h-screen flex items-center justify-center">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit((val) => handleSignUp.mutateAsync(val))}
             className="w-2/3 space-y-6"
           >
             <h1 className="text-4xl font-semibold">Sign Up</h1>
@@ -100,7 +77,11 @@ const SignUpPages: React.FC = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="input password" type="password" {...field} />
+                    <Input
+                      placeholder="input password"
+                      type="password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

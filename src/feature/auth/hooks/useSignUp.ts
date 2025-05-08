@@ -1,21 +1,57 @@
 import { z } from "zod";
+import { SigninResponse } from "../types/signin.types";
+import unauth from "@/api/unauth";
+import { useMutation } from "@tanstack/react-query";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const signupUser = async (credentials: {
+  username: string;
+  password: string;
+  email: string;
+  name: string;
+}) => {
+  const { data } = await unauth.post<SigninResponse>(
+    "/auth/register",
+    credentials
+  );
+  return data.data;
+};
 
 export const useSignUp = () => {
-  // TODO: Implement the login logic api
-  const SignUp = async (username: string, password: string) => {
-    // Simulate an API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (username === "admin" && password === "password") {
-          resolve({ token: "fake-token" });
-        } else {
-          reject(new Error("Invalid credentials"));
-        }
-      }, 1000);
-    });
-  };
+  const { setUsers } = useAuthStore();
+  const nav = useNavigate();
+  const form = useForm<z.infer<typeof ValidationSchema>>({
+    resolver: zodResolver(ValidationSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+      email: "",
+      name: "",
+    },
+  });
+  const handleSignUp = useMutation({
+    mutationFn: (data: z.infer<typeof ValidationSchema>) =>
+      signupUser({ username: data.username, password: data.password, email: data.email, name: data.name }),
+    onSuccess: (res) => {
+      setUsers({
+        user: res?.user,
+        token: res?.token,
+      });
+      nav("/dashboard");
+    },
+    onError: (error) => {
+      form.setError("root", {
+        message: "Invalid username or password",
+        type: "manual",
+      });
+      console.error("Login failed:", error);
+    },
+  });
 
-  return { SignUp };
+  return { handleSignUp, form };
 };
 
 export const ValidationSchema = z.object({
