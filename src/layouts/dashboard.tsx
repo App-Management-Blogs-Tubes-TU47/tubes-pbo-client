@@ -22,11 +22,11 @@ const DashboardLayouts: React.FC = () => {
   const sidebarItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Articles", path: "/articles" },
-    users.role === "admin" && {
+    users.user.role === "admin" && {
       name: "Categories",
       path: "/categories",
     },
-    users.role === "admin" && { name: "Users", path: "/users" },
+    users.user.role === "admin" && { name: "Users", path: "/users" },
     { name: "Profile", path: "/profile" },
   ];
 
@@ -73,7 +73,7 @@ const DashboardLayouts: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant={"outline"}>Hi {users.name}</Button>
+                    <Button variant={"outline"}>Hi {users.user.name}</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>

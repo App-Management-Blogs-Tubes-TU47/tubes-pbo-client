@@ -14,7 +14,7 @@ import { LoginAssets } from "@/assets";
 import { Link } from "react-router-dom";
 
 const SignInPages: React.FC = () => {
-  const { form, onSubmit } = useSignIn();
+  const { form, handleSignIn } = useSignIn();
 
   return (
     <div className="w-screen h-screen overflow-hidden flex items-center justify-center">
@@ -27,7 +27,7 @@ const SignInPages: React.FC = () => {
       <div className="w-[50vw] h-screen flex items-center justify-center">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit((val) => handleSignIn.mutateAsync(val))}
             className="w-2/3 space-y-6"
           >
             <h1 className="text-4xl font-semibold">Sign In</h1>

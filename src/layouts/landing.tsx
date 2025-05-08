@@ -21,14 +21,14 @@ const LandingLayouts: React.FC = () => {
     <div className="min-h-screen">
       <div className="sticky top-0 z-50 bg-background">
         <div className="flex justify-between items-center border-b p-4 shadow-md px-4">
-          <div className="text-2xl font-bold">NulisAja</div>
+          <div className="text-2xl font-bold cursor-pointer" onClick={()=> navigate('/')}>NulisAja</div>
           <div className="space-x-4 flex items-center">
             <ThemeToggleButton />
             {users.token ? (
               <div className="flex items-center space-x-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant={"outline"}>Hi {users.name}</Button>
+                    <Button variant={"outline"}>Hi {users.user.name}</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>

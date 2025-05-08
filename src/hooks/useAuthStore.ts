@@ -1,18 +1,20 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-interface UserTypes {
+export interface UserTypes {
+  token: string;
+  user: UserDataTypes;
+}
+
+export interface UserDataTypes {
   id: string;
   name: string;
+  username: string;
   email: string;
-  role: string | "admin" | "writer";
-
-  /**
-   * @Types {string | null}
-   * @description Token data
-   * @default { null }
-   */
-  token: string | null;
+  role: string;
+  profileUrl: string | null;
+  createdAt: Date;
+  updatedAt: null;
 }
 
 interface AuthState {
@@ -49,15 +51,41 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      users: { id: "", name: "", email: "", role: "", token: "" },
+      users: {
+        token: "",
+        user: {
+          id: "",
+          name: "",
+          username: "",
+          email: "",
+          role: "",
+          profileUrl: null,
+          createdAt: new Date(),
+          updatedAt: null,
+        },
+      },
       setUsers: (users) => set({ users }),
       clearUsers: () =>
-        set({ users: { id: "", name: "", email: "", role: "", token: "" } }),
+        set({
+          users: {
+            token: "",
+            user: {
+              id: "",
+              name: "",
+              username: "",
+              email: "",
+              role: "",
+              profileUrl: null,
+              createdAt: new Date(),
+              updatedAt: null,
+            },
+          },
+        }),
 
       setToken: (token) =>
         set((state) => ({ users: { ...state.users, token } })),
       clearToken: () =>
-        set((state) => ({ users: { ...state.users, token: null } })),
+        set((state) => ({ users: { ...state.users, token: "" } })),
     }),
     {
       name: "auth-storage", // Nama key di localStorage

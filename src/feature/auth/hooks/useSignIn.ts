@@ -1,8 +1,11 @@
+import unauth from "@/api/unauth";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { SigninResponse } from "../types/signin.types";
 
 export interface SignInResponseType {
   id: string;
@@ -12,64 +15,48 @@ export interface SignInResponseType {
   token: string;
 }
 
+const loginUser = async (credentials: {
+  username: string;
+  password: string;
+}) => {
+  const { data } = await unauth.post<SigninResponse>(
+    "/auth/login",
+    credentials
+  );
+  return data.data;
+};
+
 export const useSignIn = () => {
   const { setUsers } = useAuthStore();
   const nav = useNavigate();
   const form = useForm<z.infer<typeof ValidationSchema>>({
     resolver: zodResolver(ValidationSchema),
     defaultValues: {
-      username: "",
-      password: "",
+      username: "administrator",
+      password: "1!Password",
     },
   });
 
-  // TODO: Implement the login logic api
-  const SignIn = async (username: string, password: string) => {
-    // Simulate an API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (username === "admin" && password === "password") {
-          resolve({
-            id: "testid",
-            name: "admin",
-            email: "email@gmail.com",
-            role: "admin",
-            token: "fake-token",
-          });
-        } else {
-          reject(new Error("Invalid credentials"));
-        }
-      }, 1000);
-    });
-  };
-
-  const onSubmit = async (data: z.infer<typeof ValidationSchema>) => {
-    try {
-      const res = (await SignIn(
-        data.username,
-        data.password
-      )) as SignInResponseType;
-      // Handle successful login
-      if (res) {
-        setUsers({
-          id: res.id,
-          name: res.name,
-          email: res.email,
-          role: res.role,
-          token: res.token,
-        });
-        nav("/dashboard");
-      }
-    } catch (error) {
+  const handleSignIn = useMutation({
+    mutationFn: (data: z.infer<typeof ValidationSchema>) =>
+      loginUser({ username: data.username, password: data.password }),
+    onSuccess: (res) => {
+      setUsers({
+        user: res?.user,
+        token: res?.token,
+      });
+      nav("/dashboard");
+    },
+    onError: (error) => {
       form.setError("root", {
         message: "Invalid username or password",
         type: "manual",
       });
       console.error("Login failed:", error);
-    }
-  };
+    },
+  });
 
-  return { SignIn, onSubmit, form };
+  return { handleSignIn, form };
 };
 
 export const ValidationSchema = z.object({
