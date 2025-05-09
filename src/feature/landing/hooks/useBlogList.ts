@@ -82,7 +82,7 @@ export const useBlogList = (props: LandingPageProps) => {
       pagination.limit,
       search,
       undefined,
-      props.isChildrenFromAuthor ? props.isChildrenFromAuthor : "",
+      props.isChildrenFromAuthor ? props.isChildrenFromAuthorUsername : "",
     ],
     queryFn: () =>
       fetchBlogList(
@@ -147,6 +147,10 @@ export const useBlogList = (props: LandingPageProps) => {
         newPage,
         pagination.limit,
         search,
+        undefined,
+        props.isChildrenFromAuthor
+          ? props.isChildrenFromAuthorUsername
+          : ""
       );
 
       setBlogs((prev) => {
