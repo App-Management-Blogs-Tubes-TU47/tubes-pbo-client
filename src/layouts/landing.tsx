@@ -12,6 +12,7 @@ import {
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import ThemeToggleButton from "@/feature/theme/components/theme-toggle";
+import { PenTool } from "lucide-react";
 
 const LandingLayouts: React.FC = () => {
   const { users, clearUsers } = useAuthStore();
@@ -21,7 +22,15 @@ const LandingLayouts: React.FC = () => {
     <div className="min-h-screen">
       <div className="sticky top-0 z-50 bg-background">
         <div className="flex justify-between items-center border-b p-4 shadow-md px-4">
-          <div className="text-2xl font-bold cursor-pointer" onClick={()=> navigate('/')}>NulisAja</div>
+          <div
+            className="text-2xl font-bold cursor-pointer flex items-center gap-1"
+            onClick={() => navigate("/")}
+          >
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-accent-foreground/20">
+              <PenTool className="h-5 w-5" />
+            </div>
+            NulisAja
+          </div>
           <div className="space-x-4 flex items-center">
             <ThemeToggleButton />
             {users.token ? (
