@@ -36,17 +36,17 @@ const NavigationItems: NavMenuTypes[] = [
     items: [
       {
         title: "Blog",
-        url: "#",
+        url: "/blogs/articles",
         icon: Newspaper,
       },
       {
         title: "Blog Categories",
-        url: "#",
+        url: "/blogs/categories",
         icon: PieChart,
       },
       {
         title: "Comments",
-        url: "#",
+        url: "/blogs/comments",
         icon: MessageSquareText,
       },
     ],

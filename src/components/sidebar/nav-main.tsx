@@ -27,6 +27,7 @@ import {
 import React from "react";
 import clsx from "clsx";
 import { NavMainTypes, NavMenuTypes } from "./types";
+import { Link } from "react-router-dom";
 
 export function NavMain({ items }: NavMainTypes) {
   const { isMobile, open } = useSidebar();
@@ -36,7 +37,9 @@ export function NavMain({ items }: NavMainTypes) {
       {items.map((dt) =>
         dt.items ? (
           <>
-            {dt.isLabel && open && <SidebarGroupLabel>{dt.title}</SidebarGroupLabel>}
+            {dt.isLabel && open && (
+              <SidebarGroupLabel>{dt.title}</SidebarGroupLabel>
+            )}
             <SidebarMenu className={clsx(open ? "mb-5" : "mb-2")}>
               {dt.items &&
                 dt.items.map((item) =>
@@ -63,12 +66,14 @@ export function NavMain({ items }: NavMainTypes) {
 
 const SideMenuBtn: React.FC<NavMenuTypes> = (item) => {
   return (
-    <SidebarMenuItem>
-      <SidebarMenuButton tooltip={item.title}>
-        {item.icon && <item.icon />}
-        <span>{item.title}</span>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
+    <Link to={item.url || ''}>
+      <SidebarMenuItem>
+        <SidebarMenuButton tooltip={item.title}>
+          {item.icon && <item.icon />}
+          <span>{item.title}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </Link>
   );
 };
 

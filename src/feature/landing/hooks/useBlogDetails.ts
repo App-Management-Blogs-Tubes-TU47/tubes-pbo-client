@@ -2,7 +2,7 @@ import unauth from "@/api/unauth";
 import {
   BlogDetailsResponse,
   BlogDetailsResponseItem,
-} from "../types/blog-list.types";
+} from "../../blogs/types/blog-list.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CommentResponseType,

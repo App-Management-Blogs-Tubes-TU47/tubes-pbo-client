@@ -36,7 +36,7 @@ const DashboardLayouts: React.FC = () => {
             <Breadcrumb>
               <BreadcrumbList>
                 {bc.map((item, index) => (
-                  <div key={index}>
+                  <div key={index} className="flex items-center gap-2">
                     <BreadcrumbItem>
                       <BreadcrumbLink
                         asChild

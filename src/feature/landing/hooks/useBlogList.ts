@@ -4,7 +4,7 @@ import {
     BlogListResponse,
     BlogListResponseData,
     BlogListResponseItem,
-} from "../types/blog-list.types";
+} from "../../blogs/types/blog-list.types";
 import { useSearchBlogList } from "./useSearchBlogList";
 import { Pagination } from "@/types";
 import unauth from "@/api/unauth";
@@ -17,7 +17,6 @@ export const fetchBlogList = async (
   search: string,
   category?: string,
   author?: string
-  
 ): Promise<BlogListResponseData> => {
   const { data } = await unauth.get<BlogListResponse>(
     // `/public/blogs?page=${page}&size=${limit}&search=${search}`
