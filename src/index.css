@@ -220,3 +220,36 @@
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
+
+.ql-toolbar.ql-snow {
+  color: var(--color-foreground) !important;
+  border-radius: var(--radius) var(--radius) 0 0;
+  border-color: var(--color-border) !important;
+  background-color: var(--color-card) !important;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  color: var(--color-foreground) !important;
+  background-color: var(--color-card) !important;
+  border-radius: 0 0 var(--radius) var(--radius);
+  border-color: var(--color-border) !important;
+}
+/* .ql-toolbar.ql-snow .ql-formats svg {
+  color: var(--color-foreground) !important;
+  fill: var(--color-foreground) !important;
+  stroke: none !important;
+} */
+
+/* .ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: #fff;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #fff;
+  stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+  color: #fff;
+} */

@@ -5,7 +5,12 @@ import { RouteObject } from "react-router-dom";
 
 const DashboardPages = React.lazy(() => import("../feature/dashboard/pages"));
 const UserPages = React.lazy(() => import("../feature/users/pages"));
-const BlogPages = React.lazy(() => import("../feature/blogs/pages"));
+
+// Blog Pages
+const BlogPages = React.lazy(() => import("../feature/blogs/pages/list"));
+const CreateBlogPages = React.lazy(
+  () => import("../feature/blogs/pages/create")
+);
 
 export const route_auth: RouteObject[] = [
   {
@@ -33,6 +38,14 @@ export const route_auth: RouteObject[] = [
         element: (
           <Suspense fallback={<Loaders isFullScreen />}>
             <BlogPages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/blogs/articles/create",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <CreateBlogPages />
           </Suspense>
         ),
       },

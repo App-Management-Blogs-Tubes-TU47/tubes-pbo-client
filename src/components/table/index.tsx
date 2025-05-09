@@ -23,6 +23,7 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
   pagination: { page: number; limit: number };
   onPaginationChange: (pageIndex: number, pageSize: number) => void;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -31,6 +32,7 @@ export function DataTable<TData, TValue>({
   pageCount,
   pagination,
   onPaginationChange,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -77,7 +79,19 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length ? (
+          {isLoading ? (
+            <>
+              {Array.from({ length: pagination.limit }).map((_, index) => (
+                <TableRow className="animate-pulse" key={index}>
+                  {columns.map((column) => (
+                    <TableCell key={column.id}>
+                      <div className="flex items-center justify-center bg-foreground/10 h-8 rounded-md" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </>
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
