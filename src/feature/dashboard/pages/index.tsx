@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Empty from "@/components/empty";
 import dayjs from "dayjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 
 const DashboardPages: React.FC = () => {
   const { dashboard, isLoadingDashboard } = useDashboard();
@@ -78,30 +79,34 @@ const DashboardPages: React.FC = () => {
                 {(dashboard?.leaderboard || [])?.length > 0 ? (
                   dashboard?.leaderboard?.map((item, idx) => (
                     <div key={idx} className="py-2">
-                      <div className="flex flex-row items-center justify-between">
-                        <div className="flex flex-row items-center gap-2">
-                          <Avatar className="h-8 w-8 rounded-lg">
-                            <AvatarImage
-                              src={item?.profileUrl || ""}
-                              alt={item?.name}
-                              className="object-cover"
-                            />
-                            <AvatarFallback className="rounded-lg">
-                              {item?.name
-                                .split(" ")
-                                .map((name) => name[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h3 className="text-sm font-bold">{item?.name}</h3>
-                            <p className="text-xs text-gray-500">
-                              {item?.email}
-                            </p>
+                      <Link to={`/author/${item.username}`}>
+                        <div className="flex flex-row items-center justify-between">
+                          <div className="flex flex-row items-center gap-2">
+                            <Avatar className="h-8 w-8 rounded-lg">
+                              <AvatarImage
+                                src={item?.profileUrl || ""}
+                                alt={item?.name}
+                                className="object-cover"
+                              />
+                              <AvatarFallback className="rounded-lg">
+                                {item?.name
+                                  .split(" ")
+                                  .map((name) => name[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h3 className="text-sm font-bold">
+                                {item?.name}
+                              </h3>
+                              <p className="text-xs text-gray-500">
+                                {item?.email}
+                              </p>
+                            </div>
                           </div>
+                          <p className="text-sm font-bold">{item?.blogs}</p>
                         </div>
-                        <p className="text-sm font-bold">{item?.blogs}</p>
-                      </div>
+                      </Link>
                     </div>
                   ))
                 ) : (
@@ -121,9 +126,18 @@ const DashboardPages: React.FC = () => {
                 Latest blogs from your blog
               </p>
             </CardHeader>
-            <CardContent className="overflow-y-auto h-full">
+            <CardContent className="overflow-y-auto h-full divide-y-[1px]">
               {(dashboard?.blogs?.length || 0) > 0 ? (
-                (dashboard?.blogs || []).map((item, ix) => <>a</>)
+                (dashboard?.blogs || []).map((item, ix) => (
+                  <div className="py-2" key={ix}>
+                    <Link to={`/blog/${item?.slugs}`}>
+                      <h3 className="text-sm font-bold">{item?.title}</h3>
+                      <p className="text-xs text-gray-500">
+                        {dayjs(item?.createdAt).format("MMM DD, YYYY")}
+                      </p>
+                    </Link>
+                  </div>
+                ))
               ) : (
                 <Empty />
               )}
