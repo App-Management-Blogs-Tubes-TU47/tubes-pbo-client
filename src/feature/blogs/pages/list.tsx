@@ -4,6 +4,14 @@ import InputSearchDebounce from "@/components/input/input-search-debounce";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import dayjs from "dayjs";
+import ReactQuill from "react-quill-new";
 
 const BlogList = () => {
   const {
@@ -13,6 +21,9 @@ const BlogList = () => {
     isLoadingBlogList,
     totalPages,
     columns,
+    blogDetail,
+    setOpenDetail,
+    openDetail,
   } = useBlogAuthList();
   const navigate = useNavigate();
   return (
@@ -58,6 +69,43 @@ const BlogList = () => {
           });
         }}
       />
+      <Drawer
+        open={openDetail.open}
+        direction="right"
+        onClose={() => setOpenDetail({ slugs: "", open: false })}
+      >
+        {blogDetail && (
+          <DrawerContent className="overflow-y-auto overflow-x-hidden w-[50vw]">
+            <DrawerHeader>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerTitle>{blogDetail?.title}</DrawerTitle>
+              </div>
+            </DrawerHeader>
+            <div className="p-3">
+              <div className="flex flex-col ">
+                <img
+                  src={blogDetail?.tumbnailUrl}
+                  alt="blog"
+                  className="w-full h-64 object-cover rounded-md"
+                />
+                <h1 className="text-sm text-gray-500 mt-4">
+                  {blogDetail?.category?.name}
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Created : {dayjs(blogDetail?.createdAt).format("DD MMM YYYY")}
+                </p>
+              </div>
+              <div className="border rounded-md bg-foreground/5 mt-4">
+                <ReactQuill
+                  theme="bubble"
+                  value={String(blogDetail?.article)}
+                  readOnly
+                />
+              </div>
+            </div>
+          </DrawerContent>
+        )}
+      </Drawer>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import React from "react";
-import { useBlogAuthCreate } from "../hooks/useBlogAuthCreate";
+import { useBlogAuthAction } from "../hooks/useBlogAuthAction";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -17,14 +17,28 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import ReactQuill from "react-quill-new";
+import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-const CreateBlogAuth: React.FC = () => {
-  const { form, handleSubmitBlog, blogCategoryList } = useBlogAuthCreate();
+export interface ActionBlogAuth {
+  is_update?: boolean;
+}
+
+const ActionBlogAuth: React.FC<ActionBlogAuth> = (props) => {
+  const { form, handleSubmitBlog, blogCategoryList } = useBlogAuthAction();
+  const navigation = useNavigate();
 
   return (
     <div className="px-5">
       <div className="mb-5">
-        <h1 className="text-2xl font-bold">Create Blog</h1>
+        <h1 className="text-2xl font-bold">
+          {props.is_update ? "Update" : "Create"} Blog
+        </h1>
       </div>
       <Form {...form}>
         <form
@@ -49,10 +63,7 @@ const CreateBlogAuth: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="select category" />
@@ -77,10 +88,7 @@ const CreateBlogAuth: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="select status" />
@@ -101,19 +109,44 @@ const CreateBlogAuth: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Thumbnail</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0] || null;
-                      field.onChange(file);
-                    }}
-                    onBlur={field.onBlur}
-                    name={field.name}
-                    ref={field.ref}
-                  />
-                </FormControl>
+                <div className="flex gap-2">
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        field.onChange(file);
+                      }}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  {field.value && (
+                    <>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button type="button" variant="outline">
+                            Preview
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>Preview Thumbnail</DialogHeader>
+                          <img
+                            src={
+                              typeof field.value === "string"
+                                ? field.value
+                                : URL.createObjectURL(field.value)
+                            }
+                            alt="Preview"
+                            className="w-full h-auto"
+                          />
+                        </DialogContent>
+                      </Dialog>
+                    </>
+                  )}
+                </div>
               </FormItem>
             )}
           />
@@ -138,7 +171,11 @@ const CreateBlogAuth: React.FC = () => {
             )}
           />
           <div className="col-span-2 flex gap-2 justify-end mt-5 mb-10">
-            <Button type="button" variant={"destructive"}>
+            <Button
+              type="button"
+              variant={"destructive"}
+              onClick={() => navigation(-1)}
+            >
               Discard
             </Button>
             <Button type="submit">Submit</Button>
@@ -149,4 +186,4 @@ const CreateBlogAuth: React.FC = () => {
   );
 };
 
-export default CreateBlogAuth;
+export default ActionBlogAuth;

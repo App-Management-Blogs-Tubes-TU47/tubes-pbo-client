@@ -7,6 +7,7 @@ import { useBlogList } from "../hooks/useBlogList";
 import InputSearchDebounce from "@/components/input/input-search-debounce";
 import { useSearchBlogList } from "../hooks/useSearchBlogList";
 import Loaders from "@/components/loading/loaders";
+import Empty from "@/components/empty";
 
 export interface LandingPageProps {
   isChildrenFromAuthor?: boolean;
@@ -75,7 +76,8 @@ const LandingPages: React.FC<LandingPageProps> = (props) => {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
-              <h1 className="text-2xl font-semibold">No blogs found</h1>
+              {/* <h1 className="text-2xl font-semibold">No blogs found</h1> */}
+              <Empty />
             </div>
           )}
         </div>

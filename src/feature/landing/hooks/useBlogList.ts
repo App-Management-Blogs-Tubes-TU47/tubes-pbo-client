@@ -9,7 +9,7 @@ import { useSearchBlogList } from "./useSearchBlogList";
 import { Pagination } from "@/types";
 import unauth from "@/api/unauth";
 import { LandingPageProps } from "../pages/blog-list";
-import { BlogCategoryResponse, BlogCategoryResponseData } from "../types/blog-category.types";
+import { BlogCategoryResponse, BlogCategoryResponseData } from "../../blogs-category/types/blog-category.types";
 
 export const fetchBlogList = async (
   page: number,

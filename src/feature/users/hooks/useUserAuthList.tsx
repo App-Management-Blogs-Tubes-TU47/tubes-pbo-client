@@ -1,9 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  BlogListResponse,
-  BlogListResponseData,
-  BlogListResponseItem,
-} from "../types/blog-list.types";
 import auth from "@/api/auth";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -23,16 +18,17 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { confirmAPIForm } from "@/components/custom-alert";
-import { getDetailsBlogsApi } from "./useBlogAuthAction";
+import { UserResponse, UserResponseData, UserResponseItem } from "../types/users-list.types";
+import { getDetailsUsersApi } from "./useUserAuthAction";
 
-export const fetchBlogList = async (
+export const fetchUserList = async (
   page: number,
   limit: number,
   search: string,
   category?: string,
   author?: string
-): Promise<BlogListResponseData> => {
-  const { data } = await auth.get<BlogListResponse>("/blogs", {
+): Promise<UserResponseData> => {
+  const { data } = await auth.get<UserResponse>("/users", {
     params: {
       page,
       size: limit,
@@ -44,18 +40,18 @@ export const fetchBlogList = async (
   return data.data;
 };
 
-export const deleteBlogApi = async (slugs: string) => {
-  const { data } = await auth.delete<BlogListResponse>(`/blogs/${slugs}`);
+export const deleteUserApi = async (username: string) => {
+  const { data } = await auth.delete<UserResponse>(`/users/${username}`);
   return data.data;
 };
 
-export const useBlogAuthList = () => {
+export const useUserAuthList = () => {
   const { users } = useAuthStore();
   const [openDetail, setOpenDetail] = useState<{
-    slugs: string;
+    username: string;
     open: boolean;
   }>({
-    slugs: "",
+    username: "",
     open: false,
   });
   const [pagination, setPagination] = useState({
@@ -66,21 +62,21 @@ export const useBlogAuthList = () => {
   });
   const [totalPages, setTotalPages] = useState(0);
   const {
-    data: blogList,
-    isLoading: isLoadingBlogList,
-    isError: isErrorBlogList,
-    error: errorBlogList,
-    refetch: refetchBlogList,
+    data: userList,
+    isLoading: isLoadingUserList,
+    isError: isErrorUserList,
+    error: errorUserList,
+    refetch: refeUser,
   } = useQuery({
     queryKey: [
-      "blog-auth-list",
+      "user-auth-list",
       pagination.page,
       pagination.limit,
       pagination.search,
       pagination.category,
     ],
     queryFn: () =>
-      fetchBlogList(
+      fetchUserList(
         pagination.page,
         pagination.limit,
         pagination.search,
@@ -91,19 +87,19 @@ export const useBlogAuthList = () => {
   });
 
   useEffect(() => {
-    if (blogList?.pagination) {
-      setTotalPages(blogList.pagination.totalPages);
+    if (userList?.pagination) {
+      setTotalPages(userList.pagination.totalPages);
     }
-  }, [blogList]);
+  }, [userList]);
 
-  const { data: blogDetail } = useQuery({
-    queryKey: ["blog-auth-list", "category"],
-    queryFn: () => getDetailsBlogsApi(openDetail.slugs),
+  const { data: userDetail } = useQuery({
+    queryKey: ["user-auth-list"],
+    queryFn: () => getDetailsUsersApi(openDetail.username),
     refetchOnWindowFocus: false,
     enabled: openDetail.open,
   });
 
-  const columns: ColumnDef<BlogListResponseItem>[] = [
+  const columns: ColumnDef<UserResponseItem>[] = [
     {
       accessorKey: "id",
       header: "No",
@@ -111,9 +107,9 @@ export const useBlogAuthList = () => {
         <div>{row.index + 1 + (pagination.page - 1) * pagination.limit}</div>
       ),
     },
-    ...blogcolumnsdata,
+    ...userscolumnsdata,
     {
-      accessorKey: "slugs",
+      accessorKey: "action",
       header: "Action",
       cell: ({ row }) => (
         <div>
@@ -131,7 +127,7 @@ export const useBlogAuthList = () => {
                   <DropdownMenuItem
                     onClick={() => {
                       setOpenDetail({
-                        slugs: row.getValue("slugs"),
+                        username: row.getValue("username"),
                         open: true,
                       });
                     }}
@@ -140,7 +136,7 @@ export const useBlogAuthList = () => {
                     <span>Detail</span>
                   </DropdownMenuItem>
                 </>
-                <Link to={`/blogs/articles/update/${row.getValue("slugs")}`}>
+                <Link to={`/users/update/${row.getValue("username")}`}>
                   <DropdownMenuItem>
                     <Pencil />
                     <span>Edit</span>
@@ -151,12 +147,12 @@ export const useBlogAuthList = () => {
                     onClick={() => {
                       confirmAPIForm({
                         callAPI() {
-                          return deleteBlogApi(row.getValue("slugs"));
+                          return deleteUserApi(row.getValue("username"));
                         },
                         onAlertSuccess() {
-                          refetchBlogList();
+                          refeUser();
                         },
-                        message: "Are you sure to delete this blog?",
+                        message: "Are you sure to delete this user?",
                         title: "Confirmation",
                       });
                     }}
@@ -174,30 +170,33 @@ export const useBlogAuthList = () => {
   ];
 
   return {
-    blogList,
-    isLoadingBlogList,
-    isErrorBlogList,
-    errorBlogList,
-    refetchBlogList,
+    userList,
+    isLoadingUserList,
+    isErrorUserList,
+    errorUserList,
     pagination,
     setPagination,
     totalPages,
     columns,
-    blogDetail,
+    userDetail,
     setOpenDetail,
     openDetail,
   };
 };
 
-const blogcolumnsdata: ColumnDef<BlogListResponseItem>[] = [
+const userscolumnsdata: ColumnDef<UserResponseItem>[] = [
   {
-    accessorKey: "title",
-    header: "Title",
+    accessorKey: "name",
+    header: "Name",
   },
   {
-    accessorKey: "categoryName",
-    header: "Category",
-    cell: ({ row }) => <div>{row.getValue("categoryName")}</div>,
+    accessorKey: "username",
+    header: "Username",
+  },
+
+  {
+    accessorKey: "email",
+    header: "Email",
   },
   {
     accessorKey: "createdAt",
@@ -207,16 +206,16 @@ const blogcolumnsdata: ColumnDef<BlogListResponseItem>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "role",
+    header: "Role",
     cell: ({ row }) => (
       <div>
-        {row.getValue("status") === "DRAFT" ? (
-          <Badge variant={"secondary"}>Draft</Badge>
-        ) : row.getValue("status") === "PUBLISH" ? (
-          <Badge>Publish</Badge>
+        {row.getValue("role") === "WRITTER" ? (
+          <Badge variant={"secondary"}>Writter</Badge>
+        ) : row.getValue("role") === "ADMIN" ? (
+          <Badge>Admin</Badge>
         ) : (
-          <Badge variant={"destructive"}>Archive</Badge>
+          <>-</>
         )}
       </div>
     ),

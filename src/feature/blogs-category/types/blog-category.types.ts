@@ -18,3 +18,11 @@ export interface BlogCategoryResponseItem {
     createdAt: Date;
     updatedAt: null;
 }
+
+
+// Details
+export interface BlogCategoryDetailResponse {
+    message: string;
+    status:  number;
+    data:    BlogCategoryResponseItem;
+}

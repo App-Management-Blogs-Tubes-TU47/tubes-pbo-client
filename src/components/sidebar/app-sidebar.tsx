@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   ChartPie,
-  MessageSquareText,
+  // MessageSquareText,
   Newspaper,
   PieChart,
   Users,
@@ -18,17 +18,19 @@ import {
 } from "@/components/ui/sidebar";
 import { NavHeader } from "./nav-header";
 import { NavMenuTypes } from "./types";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
-const NavigationItems: NavMenuTypes[] = [
+const baseNavigationItems: NavMenuTypes[] = [
   {
     title: "Dashboard",
-    url: "/dashboard",
-    icon: ChartPie,
-  },
-  {
-    title: "Users",
-    url: "/users",
-    icon: Users,
+    isLabel: true,
+    items: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: ChartPie,
+      },
+    ],
   },
   {
     title: "Blogs",
@@ -44,23 +46,55 @@ const NavigationItems: NavMenuTypes[] = [
         url: "/blogs/categories",
         icon: PieChart,
       },
-      {
-        title: "Comments",
-        url: "/blogs/comments",
-        icon: MessageSquareText,
-      },
+      // {
+      //   title: "Comments",
+      //   url: "/blogs/comments",
+      //   icon: MessageSquareText,
+      // },
     ],
   },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { users } = useAuthStore();
+  const [navigationItems, setNavigationItems] =
+    React.useState<NavMenuTypes[]>(baseNavigationItems);
+
+  React.useEffect(() => {
+    if (users?.user?.role === "ADMIN") {
+      setNavigationItems((prev) => {
+        // Remove existing "Administration" menu if present
+        const filtered = prev.filter((item) => item.title !== "Administration");
+        return [
+          ...filtered,
+          {
+            title: "Administration",
+            isLabel: true,
+            items: [
+              {
+                title: "Users",
+                url: "/users",
+                icon: Users,
+              },
+            ],
+          },
+        ];
+      });
+    } else {
+      // Remove "Administration" menu if not admin
+      setNavigationItems((prev) =>
+        prev.filter((item) => item.title !== "Administration")
+      );
+    }
+  }, [users?.user?.role]);
+
   return (
     <Sidebar collapsible="icon" variant="sidebar" {...props}>
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={NavigationItems} />
+        <NavMain items={navigationItems} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

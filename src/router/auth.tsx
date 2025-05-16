@@ -4,12 +4,24 @@ import React, { Suspense } from "react";
 import { RouteObject } from "react-router-dom";
 
 const DashboardPages = React.lazy(() => import("../feature/dashboard/pages"));
-const UserPages = React.lazy(() => import("../feature/users/pages"));
+const UserPages = React.lazy(() => import("../feature/users/pages/list"));
+const ActionUserPages = React.lazy(
+  () => import("../feature/users/pages/action")
+);
 
 // Blog Pages
 const BlogPages = React.lazy(() => import("../feature/blogs/pages/list"));
-const CreateBlogPages = React.lazy(
-  () => import("../feature/blogs/pages/create")
+const ActionBlogPages = React.lazy(
+  () => import("../feature/blogs/pages/action")
+);
+
+// Blog Category Pages
+const BlogCategoryPages = React.lazy(
+  () => import("../feature/blogs-category/pages/list")
+);
+
+const ActionBlogCategoryPages = React.lazy(
+  () => import("../feature/blogs-category/pages/action")
 );
 
 export const route_auth: RouteObject[] = [
@@ -34,6 +46,22 @@ export const route_auth: RouteObject[] = [
         ),
       },
       {
+        path: "/users/create",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ActionUserPages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/users/update/:username",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ActionUserPages is_update />
+          </Suspense>
+        ),
+      },
+      {
         path: "/blogs/articles",
         element: (
           <Suspense fallback={<Loaders isFullScreen />}>
@@ -45,7 +73,41 @@ export const route_auth: RouteObject[] = [
         path: "/blogs/articles/create",
         element: (
           <Suspense fallback={<Loaders isFullScreen />}>
-            <CreateBlogPages />
+            <ActionBlogPages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/blogs/articles/update/:slug",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ActionBlogPages is_update />
+          </Suspense>
+        ),
+      },
+
+      // Blog Category
+      {
+        path: "/blogs/categories",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <BlogCategoryPages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/blogs/categories/create",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ActionBlogCategoryPages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/blogs/categories/update/:slug",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ActionBlogCategoryPages is_update />
           </Suspense>
         ),
       },
