@@ -8,7 +8,6 @@ import InputSearchDebounce from "@/components/input/input-search-debounce";
 import { useSearchBlogList } from "../hooks/useSearchBlogList";
 import Loaders from "@/components/loading/loaders";
 import Empty from "@/components/empty";
-import clsx from "clsx";
 
 export interface LandingPageProps {
   isChildrenFromAuthor?: boolean;
@@ -89,12 +88,8 @@ const LandingPages: React.FC<LandingPageProps> = (props) => {
           {blogCategoryList?.item?.map((category, i) => (
             <div
               key={i}
-              className={clsx(
-                "p-2 border rounded-md cursor-pointer hover:bg-foreground/5 w-fit"
-              )}
-              onClick={() => {
-                // setSearch(category?.name);
-              }}
+              className="p-2 border rounded-md cursor-pointer hover:bg-foreground/5 w-fit"
+              onClick={() => navigate(`/category/${category.slugs}`)}
             >
               {category?.name}
             </div>
