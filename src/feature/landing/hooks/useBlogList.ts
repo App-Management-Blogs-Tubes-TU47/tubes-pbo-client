@@ -1,15 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, useCallback } from "react";
 import {
-    BlogListResponse,
-    BlogListResponseData,
-    BlogListResponseItem,
+  BlogListResponse,
+  BlogListResponseData,
+  BlogListResponseItem,
 } from "../../blogs/types/blog-list.types";
 import { useSearchBlogList } from "./useSearchBlogList";
 import { Pagination } from "@/types";
 import unauth from "@/api/unauth";
 import { LandingPageProps } from "../pages/blog-list";
-import { BlogCategoryResponse, BlogCategoryResponseData } from "../../blogs-category/types/blog-category.types";
+import {
+  BlogCategoryResponse,
+  BlogCategoryResponseData,
+} from "../../blogs-category/types/blog-category.types";
 
 export const fetchBlogList = async (
   page: number,
@@ -28,19 +31,17 @@ export const fetchBlogList = async (
         search,
         category,
         author,
-        status: "PUBLISH"
+        status: "PUBLISH",
       },
     }
   );
   return data.data;
 };
 
-
 export const fetchBlogCategoryList = async (
   page: number,
   limit: number,
-  search: string,
-  
+  search: string
 ): Promise<BlogCategoryResponseData> => {
   const { data } = await unauth.get<BlogCategoryResponse>(
     // `/public/blogs?page=${page}&size=${limit}&search=${search}`
@@ -90,9 +91,7 @@ export const useBlogList = (props: LandingPageProps) => {
         pagination.limit,
         search,
         undefined,
-        props.isChildrenFromAuthor
-          ? props.isChildrenFromAuthorUsername
-          : ""
+        props.isChildrenFromAuthor ? props.isChildrenFromAuthorUsername : ""
       ),
     enabled: pagination.page === 1,
   });
@@ -102,21 +101,10 @@ export const useBlogList = (props: LandingPageProps) => {
     isLoading: isLoadingCategory,
     refetch: refetchCategory,
   } = useQuery({
-    queryKey: [
-      "blog-category",
-      1,
-      10,
-      search,
-    ],
-    queryFn: () =>
-      fetchBlogCategoryList(
-        1,
-        10,
-        search
-      ),
+    queryKey: ["blog-category", 1, 100, ""],
+    queryFn: () => fetchBlogCategoryList(1, 100, ""),
     enabled: pagination.page === 1,
   });
-
 
   useEffect(() => {
     setBlogs([]);
@@ -148,9 +136,7 @@ export const useBlogList = (props: LandingPageProps) => {
         pagination.limit,
         search,
         undefined,
-        props.isChildrenFromAuthor
-          ? props.isChildrenFromAuthorUsername
-          : ""
+        props.isChildrenFromAuthor ? props.isChildrenFromAuthorUsername : ""
       );
 
       setBlogs((prev) => {
