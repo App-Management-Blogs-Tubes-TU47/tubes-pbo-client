@@ -10,6 +10,7 @@ import { Pagination } from "@/types";
 import unauth from "@/api/unauth";
 import { LandingPageProps } from "../pages/blog-list";
 import { BlogCategoryResponse, BlogCategoryResponseData } from "../../blogs-category/types/blog-category.types";
+import { useSearchParams } from "react-router-dom";
 
 export const fetchBlogList = async (
   page: number,
@@ -58,6 +59,9 @@ export const fetchBlogCategoryList = async (
 
 export const useBlogList = (props: LandingPageProps) => {
   const { search } = useSearchBlogList();
+  const [searchparams] = useSearchParams()
+  const ctg = searchparams.get("ctg") || "";
+
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 9,
@@ -81,7 +85,7 @@ export const useBlogList = (props: LandingPageProps) => {
       pagination.page,
       pagination.limit,
       search,
-      undefined,
+      ctg,
       props.isChildrenFromAuthor ? props.isChildrenFromAuthorUsername : "",
     ],
     queryFn: () =>
@@ -89,7 +93,7 @@ export const useBlogList = (props: LandingPageProps) => {
         pagination.page,
         pagination.limit,
         search,
-        undefined,
+        ctg,
         props.isChildrenFromAuthor
           ? props.isChildrenFromAuthorUsername
           : ""
@@ -121,7 +125,9 @@ export const useBlogList = (props: LandingPageProps) => {
   useEffect(() => {
     setBlogs([]);
     setPagination((prev) => ({ ...prev, page: 1 }));
-  }, [search]);
+    refetch();
+  }, [search, ctg, props.isChildrenFromAuthor, props.isChildrenFromAuthorUsername]);
+
 
   useEffect(() => {
     if (blogList) {
@@ -147,7 +153,7 @@ export const useBlogList = (props: LandingPageProps) => {
         newPage,
         pagination.limit,
         search,
-        undefined,
+        ctg,
         props.isChildrenFromAuthor
           ? props.isChildrenFromAuthorUsername
           : ""
@@ -165,7 +171,7 @@ export const useBlogList = (props: LandingPageProps) => {
     } finally {
       setIsFetching(false);
     }
-  }, [pagination, isFetching, search]);
+  }, [pagination, isFetching, search, ctg]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -194,5 +200,6 @@ export const useBlogList = (props: LandingPageProps) => {
     blogCategoryList,
     isLoadingCategory,
     refetchCategory,
+    categoryParams: ctg
   };
 };

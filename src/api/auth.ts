@@ -20,15 +20,6 @@ auth.interceptors.response.use(
   (response) => response, // Jika sukses, lanjutkan responsenya
   (error) => {
     if (error.response?.status === 401) {
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Unauthorized",
-      //   text: "Your session has expired. Please log in again.",
-      //   confirmButtonText: "OK",
-      // }).then(() => {
-      //   useAuthStore.getState().clearUsers();
-      //   window.location.href = "/login";
-      // });
       callAlert({
         type: "error",
         title: "Unauthorized",
@@ -38,6 +29,13 @@ auth.interceptors.response.use(
           window.location.href = "/login";
         }
       })
+    }else {
+      const errorMessage = error.response?.data?.error || "An error occurred";
+      callAlert({
+        type: "error",
+        title: "Error",
+        message: errorMessage,
+      });
     }
 
     return Promise.reject(error);

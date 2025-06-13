@@ -2,12 +2,15 @@ import React from "react";
 import dayjs from "dayjs";
 import Icon from "@mdi/react";
 import { mdiChat } from "@mdi/js";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useBlogList } from "../hooks/useBlogList";
 import InputSearchDebounce from "@/components/input/input-search-debounce";
 import { useSearchBlogList } from "../hooks/useSearchBlogList";
 import Loaders from "@/components/loading/loaders";
 import Empty from "@/components/empty";
+import { Badge } from "@/components/ui/badge";
+import { formatSlugToTitle } from "@/utils/formatSlugToTitle";
+import { mdiClose } from "@mdi/js";
 
 export interface LandingPageProps {
   isChildrenFromAuthor?: boolean;
@@ -19,8 +22,11 @@ function stripHtmlTags(input: string) {
 }
 
 const LandingPages: React.FC<LandingPageProps> = (props) => {
-  const { blogs, blogCategoryList, isLoading } = useBlogList(props);
+  const { blogs, blogCategoryList, isLoading, categoryParams } =
+    useBlogList(props);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { search, setSearch } = useSearchBlogList();
   return (
     <div className="flex flex-row">
@@ -30,6 +36,27 @@ const LandingPages: React.FC<LandingPageProps> = (props) => {
           onChange={(val) => setSearch(val)}
           className="w-full border-support-100/30 focus:ring-blue-500"
         />
+
+        {categoryParams && (
+          <div className="mt-4">
+            Category :{" "}
+            <Badge variant={"default"} className="">
+              {formatSlugToTitle(categoryParams)}
+              <div
+                onClick={() => {
+                  navigate(location.pathname);
+                }}
+              >
+                <Icon
+                  path={mdiClose}
+                  size={0.8}
+                  className="cursor-pointer ml-2"
+                />
+              </div>
+            </Badge>
+          </div>
+        )}
+
         <div>
           {isLoading ? (
             <Loaders />
@@ -89,7 +116,10 @@ const LandingPages: React.FC<LandingPageProps> = (props) => {
             <div
               key={i}
               className="p-2 border rounded-md cursor-pointer hover:bg-foreground/5 w-fit"
-              onClick={() => navigate(`/category/${category.slugs}`)}
+              // onClick={() => navigate(`/category/${category.slugs}`)}
+              onClick={() => {
+                navigate(location.pathname + `?ctg=${category?.slugs}`);
+              }}
             >
               {category?.name}
             </div>
