@@ -24,6 +24,9 @@ const ActionBlogCategoryPages = React.lazy(
   () => import("../feature/blogs-category/pages/action")
 );
 
+// Profile Pages
+const ProfilePages = React.lazy(() => import("../feature/profile/pages/index"));
+
 export const route_auth: RouteObject[] = [
   {
     path: "/",
@@ -111,6 +114,14 @@ export const route_auth: RouteObject[] = [
           </Suspense>
         ),
       },
+      {
+        path: "/profile",
+        element: (
+          <Suspense fallback={<Loaders isFullScreen />}>
+            <ProfilePages />
+          </Suspense>
+        )
+      }
     ],
   },
 ];

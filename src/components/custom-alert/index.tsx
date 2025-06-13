@@ -44,7 +44,7 @@ export const callAlert = ({
       cancelButton: "btn-disabled",
       popup: "!bg-background !text-foreground",
     },
-    html: `<div style="padding-bottom: 20px;" class="border-b-[1.5px]"><p class="text-3xl font-medium">${title}</p><div style="color:#48505E; font-size:16px; margin-top:10px;padding-left: 0.9rem;padding-right:0.9rem">${message}</div></div>`,
+    html: `<div style="padding-bottom: 20px;" class="border-b-[1.5px]"><p class="text-3xl font-medium">${title}</p><div style="font-size:16px; margin-top:10px;padding-left: 0.9rem;padding-right:0.9rem">${message}</div></div>`,
     icon,
     iconColor,
     width: 400,

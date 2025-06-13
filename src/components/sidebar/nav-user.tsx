@@ -1,4 +1,4 @@
-import { ChevronsUpDown, LogOut, SunMoon } from "lucide-react";
+import { ChevronsUpDown, LogOut, SunMoon, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -19,11 +19,13 @@ import {
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useThemeStore } from "@/feature/theme/hooks/useTheme";
 import { callAlert } from "../custom-alert";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { users, clearUsers } = useAuthStore();
   const { toggleTheme } = useThemeStore();
+  const navigate = useNavigate();
 
   return (
     <SidebarMenu>
@@ -88,6 +90,10 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <User />
+                Profile
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={toggleTheme}>
                 <SunMoon />
                 Change Theme
