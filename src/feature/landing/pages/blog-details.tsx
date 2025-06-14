@@ -100,6 +100,7 @@ const BlogDetailsPages: React.FC = () => {
                       variant={"outline"}
                       size={"icon"}
                       type="submit"
+                      disabled={!comment}
                       onClick={(e) => {
                         e.preventDefault();
                         sendComments.mutateAsync(comment).then(() => {
